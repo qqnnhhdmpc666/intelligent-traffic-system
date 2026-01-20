@@ -1,0 +1,69 @@
+<resources>
+    <string name="app_name">智慧交通</string>
+    
+    <!-- 导航标题 -->
+    <string name="nav_home">首页</string>
+    <string name="nav_path_planning">路径规划</string>
+    <string name="nav_monitor">监控</string>
+    <string name="nav_settings">设置</string>
+    
+    <!-- 首页 -->
+    <string name="home_title">智慧交通调度系统</string>
+    <string name="home_subtitle">连接智能，畅行无阻</string>
+    <string name="system_status">系统状态</string>
+    <string name="server_connected">服务器已连接</string>
+    <string name="server_disconnected">服务器未连接</string>
+    <string name="quick_actions">快速操作</string>
+    <string name="plan_route">规划路线</string>
+    <string name="monitor_traffic">监控交通</string>
+    <string name="system_stats">系统统计</string>
+    
+    <!-- 路径规划 -->
+    <string name="path_planning_title">路径规划</string>
+    <string name="vehicle_info">车辆信息</string>
+    <string name="vehicle_id">车辆ID</string>
+    <string name="vehicle_type">车辆类型</string>
+    <string name="normal_vehicle">普通车辆</string>
+    <string name="emergency_vehicle">紧急车辆</string>
+    <string name="route_info">路线信息</string>
+    <string name="start_node">起始节点</string>
+    <string name="end_node">目标节点</string>
+    <string name="select_node">选择节点</string>
+    <string name="plan_sync">同步规划</string>
+    <string name="plan_async">异步规划</string>
+    <string name="planning_result">规划结果</string>
+    
+    <!-- 监控 -->
+    <string name="monitor_title">实时监控</string>
+    <string name="system_overview">系统概览</string>
+    <string name="traffic_network">交通网络</string>
+    <string name="thread_pool">线程池</string>
+    <string name="log_monitor">日志监控</string>
+    <string name="refresh">刷新</string>
+    <string name="auto_refresh">自动刷新</string>
+    
+    <!-- 设置 -->
+    <string name="settings_title">设置</string>
+    <string name="server_settings">服务器设置</string>
+    <string name="app_settings">应用设置</string>
+    <string name="about">关于</string>
+    <string name="server_address">服务器地址</string>
+    <string name="connection_timeout">连接超时</string>
+    <string name="version">版本</string>
+    
+    <!-- 通用 -->
+    <string name="ok">确定</string>
+    <string name="cancel">取消</string>
+    <string name="loading">加载中...</string>
+    <string name="error">错误</string>
+    <string name="success">成功</string>
+    <string name="retry">重试</string>
+    <string name="no_data">暂无数据</string>
+    
+    <!-- 错误信息 -->
+    <string name="error_network">网络连接失败</string>
+    <string name="error_server">服务器错误</string>
+    <string name="error_timeout">请求超时</string>
+    <string name="error_unknown">未知错误</string>
+</resources>
+

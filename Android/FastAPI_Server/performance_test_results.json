@@ -1,0 +1,29 @@
+{
+  "timestamp": "2026-01-17 22:56:05",
+  "path_planning": {
+    "total_requests": 150,
+    "success_rate": 60.0,
+    "average_response_time": 0.0059678204854329425,
+    "qps": 4.963085398892704
+  },
+  "traffic_update": {
+    "total_requests": 300,
+    "success_rate": 100.0,
+    "average_response_time": 0.03795827786127726,
+    "qps": 9.92512022983341
+  },
+  "paper_metrics": {
+    "average_trip_time": 5.97,
+    "average_delay_time": 17.58,
+    "network_throughput": 7.5,
+    "average_network_speed": 100,
+    "congestion_index": 87.1,
+    "test_summary": {
+      "path_planning_requests": 150,
+      "traffic_update_requests": 300,
+      "total_requests": 450,
+      "path_success_rate": 60.0,
+      "traffic_success_rate": 100.0
+    }
+  }
+}

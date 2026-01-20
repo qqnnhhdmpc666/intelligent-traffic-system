@@ -1,0 +1,47 @@
+# TrafficVisionSystem 配置文件
+
+# 系统基本信息
+system:
+  name: "TrafficVisionSystem"
+  version: "1.0.0"
+  intersection_id: "TEST_001"
+  location: "Test Location"
+
+# 服务器配置
+server:
+  base_url: "http://localhost:8000"  # 本地FastAPI服务器地址
+  timeout: 30
+  retry_attempts: 3
+  retry_delay: 5
+  report_interval: 10
+  batch_size: 100
+  api_endpoints:
+    traffic_update: "/api/traffic_update"
+    health_check: "/health"
+
+# 摄像头配置
+camera:
+  type: "usb"
+  width: 1280
+  height: 720
+  fps: 30
+  usb_device_id: 0
+
+# 检测配置
+detection:
+  model_path: "./models/yolov8n.pt"
+  device: "cpu"
+  confidence_threshold: 0.5
+  target_classes: [2, 3, 5, 7]
+
+# 监控配置
+monitoring:
+  enable_system_monitor: true
+  monitor_interval: 30
+
+# 日志配置
+logging:
+  level: "INFO"
+  console_output: true
+  file_output: true
+  log_dir: "./logs"

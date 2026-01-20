@@ -1,0 +1,33 @@
+# FastAPI智慧交通调度系统依赖
+# 核心框架
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+
+# 数据验证和序列化
+pydantic==2.5.0
+
+# 数据库
+sqlalchemy==2.0.23
+aiosqlite==0.19.0
+
+# 异步HTTP客户端
+httpx==0.25.2
+
+# 工具库
+python-multipart==0.0.6
+
+# 可选：API文档增强
+python-jose[cryptography]==3.3.0
+
+# 开发依赖
+pytest==7.4.3
+pytest-asyncio==0.21.1
+
+# 性能测试依赖
+locust==2.17.0          # 性能测试框架
+requests==2.31.0        # HTTP请求
+aiohttp==3.9.1          # 异步HTTP客户端
+
+# 日志和配置
+loguru==0.7.2
+python-dotenv==1.0.0
