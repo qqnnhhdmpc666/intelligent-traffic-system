@@ -89,6 +89,17 @@ class PathRequest(BaseModel):
     end_node: str
     vehicle_type: str = "normal"
 
+class PathDetail(BaseModel):
+    """路径详细信息"""
+    path: List[str]
+    weight: float
+    distance: float
+    duration: float
+    congestion: float
+    probability: float
+    rank: int
+    label: Optional[str] = None
+
 class PathResponse(BaseModel):
     """路径规划响应"""
     path: List[str]
@@ -97,6 +108,7 @@ class PathResponse(BaseModel):
     duration: float
     congestion: float
     message: str
+    all_paths: Optional[List[PathDetail]] = None
 
 class NodeInfo(BaseModel):
     """节点信息"""

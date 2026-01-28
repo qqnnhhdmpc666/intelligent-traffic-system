@@ -13,10 +13,10 @@ except ImportError:
     from graph import Graph
     from pathfinding import Dijkstra, YensKShortestPaths, SoftmaxSelector
 # 配置参数（硬编码，避免Django依赖）
-K_SHORTEST_PATHS = 5      # K短路算法的K值
-SOFTMAX_TEMPERATURE = 1.0  # Softmax温度系数
-WEIGHT_ALPHA = 0.6        # 权重系数α
-WEIGHT_BETA = 0.4         # 权重系数β
+K_SHORTEST_PATHS = 25     # K短路算法的K值（大幅增加以提高路径多样性）
+SOFTMAX_TEMPERATURE = 0.08  # Softmax温度系数（进一步降低以提高选择质量）
+WEIGHT_ALPHA = 0.1         # 权重系数α（保持以增加拥堵的影响）
+WEIGHT_BETA = 0.9          # 权重系数β（保持以增加拥堵的影响）
 
 
 class GraphCache:
@@ -190,6 +190,9 @@ class RoutePlanner:
         if cached_result:
             cached_result['cached'] = True
             cached_result['processing_time'] = time.time() - start_time
+            # 确保缓存结果中包含all_paths字段
+            if 'all_paths' not in cached_result:
+                cached_result['all_paths'] = None
             return cached_result
         
         # 获取图（使用缓存优化）
@@ -265,7 +268,7 @@ class RoutePlanner:
                 return result
             
             # 计算路径的详细信息
-            distance, duration, congestion = self._calculate_path_details(path)
+            distance, duration, congestion = self._calculate_path_details(path, graph)
             processing_time = time.time() - start_time
             
             return {
@@ -302,26 +305,104 @@ class RoutePlanner:
             k_paths, temperature=self.SOFTMAX_TEMPERATURE
         )
         
-        # 3. 根据概率分布随机选择一条路径
-        selected_path, selected_weight = SoftmaxSelector.select_path(
-            k_paths, probabilities
-        )
+        # 计算每条路径的详细信息
+        paths_with_details = []
+        for i, (path, weight) in enumerate(k_paths):
+            distance, duration, congestion = self._calculate_path_details(path, graph)
+            paths_with_details.append({
+                'path': path,
+                'weight': weight,
+                'distance': distance,
+                'duration': duration,
+                'congestion': congestion,
+                'probability': probabilities[i],
+                'rank': i + 1
+            })
         
-        # 计算路径的详细信息
-        distance, duration, congestion = self._calculate_path_details(selected_path, graph)
+        # 为路径添加标签
+        if paths_with_details:
+            # 找到最短距离的路径
+            shortest_distance = min(paths_with_details, key=lambda x: x['distance'])
+            shortest_distance['label'] = '最短距离'
+            
+            # 找到最快时间的路径
+            fastest_time = min(paths_with_details, key=lambda x: x['duration'])
+            fastest_time['label'] = '最快时间'
+            
+            # 找到最畅通的路径
+            least_congested = min(paths_with_details, key=lambda x: x['congestion'])
+            least_congested['label'] = '最畅通'
+            
+            # 找到最高概率的路径
+            highest_probability = max(paths_with_details, key=lambda x: x['probability'])
+            highest_probability['label'] = '推荐路径'
+        
+        # 选择默认路径（在拥堵场景中优先规避拥堵路段）
+        if paths_with_details:
+            # 计算每条路径的拥堵程度和时间
+            max_congestion = max(p['congestion'] for p in paths_with_details) if paths_with_details else 0
+            avg_duration = sum(p['duration'] for p in paths_with_details) / len(paths_with_details) if paths_with_details else 0
+            avg_congestion = sum(p['congestion'] for p in paths_with_details) / len(paths_with_details) if paths_with_details else 0
+            min_duration = min(p['duration'] for p in paths_with_details) if paths_with_details else 0
+            max_duration = max(p['duration'] for p in paths_with_details) if paths_with_details else 0
+            
+            # 计算每条路径的评分
+            for p in paths_with_details:
+                # 基础时间评分（权重最高）
+                time_score = p['duration'] * 1.0
+                
+                # 拥堵惩罚（激进增强极端拥堵下的惩罚力度）
+                if max_congestion > 0:
+                    # 动态调整拥堵惩罚权重，拥堵越严重，惩罚权重越大
+                    congestion_weight = 0.6  # 进一步增加基础权重
+                    if p['congestion'] > avg_congestion * 2.0:  # 更严格的阈值
+                        congestion_weight = 3.0  # 大幅增加严重拥堵的惩罚
+                    elif p['congestion'] > avg_congestion * 1.5:
+                        congestion_weight = 2.0  # 进一步增加中度拥堵的惩罚
+                    elif p['congestion'] > avg_congestion:
+                        congestion_weight = 1.2  # 进一步增加轻微拥堵的惩罚
+                    
+                    # 改进拥堵惩罚计算，使用更强烈的非线性惩罚函数
+                    congestion_ratio = p['congestion'] / max_congestion
+                    congestion_penalty = (congestion_ratio ** 3) * avg_duration * congestion_weight  # 立方函数大幅增强惩罚
+                else:
+                    congestion_penalty = 0
+                
+                # 路径长度惩罚（避免路径过长，惩罚较轻）
+                path_length_penalty = (len(p['path']) - 2) * 0.3  # 减少路径长度惩罚，鼓励绕开拥堵路段
+                
+                # 时间接近度奖励（如果路径时间接近最短时间，给予奖励）
+                time_proximity_bonus = 0
+                if min_duration > 0 and p['duration'] <= min_duration * 1.15:  # 放宽时间接近度阈值
+                    time_proximity_bonus = - (min_duration * 0.15)  # 增加时间奖励
+                
+                # 拥堵分布奖励（如果路径拥堵低于平均水平，给予额外奖励）
+                congestion_bonus = 0
+                if avg_congestion > 0 and p['congestion'] < avg_congestion * 0.8:
+                    congestion_bonus = - (avg_congestion * 0.2)  # 拥堵低于平均水平的奖励
+                
+                # 综合评分 = 时间评分 + 拥堵惩罚 + 路径长度惩罚 + 时间接近度奖励 + 拥堵分布奖励
+                p['comprehensive_score'] = time_score + congestion_penalty + path_length_penalty + time_proximity_bonus + congestion_bonus
+            
+            # 选择综合评分最低的路径
+            selected_path_info = min(paths_with_details, key=lambda x: x['comprehensive_score'])
+        else:
+            selected_path_info = None
+        
         processing_time = time.time() - start_time
         
         result = {
-            'path': selected_path,
-            'weight': selected_weight,
-            'distance': distance,
-            'duration': duration,
-            'congestion': congestion,
+            'path': selected_path_info['path'] if selected_path_info else [],
+            'weight': selected_path_info['weight'] if selected_path_info else 0,
+            'distance': selected_path_info['distance'] if selected_path_info else 0,
+            'duration': selected_path_info['duration'] if selected_path_info else 0,
+            'congestion': selected_path_info['congestion'] if selected_path_info else 0,
             'message': '路径规划成功',
             'processing_time': processing_time,
             'alternative_paths': len(k_paths),  # 备选路径数量
             'probabilities': probabilities,  # 各路径的选择概率（用于调试）
-            'cached': False
+            'cached': False,
+            'all_paths': paths_with_details  # 返回所有路径及其详细信息
         }
 
         # 缓存计算结果

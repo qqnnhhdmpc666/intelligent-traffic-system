@@ -49,77 +49,80 @@ async def get_system_stats():
     包括路网状态、系统负载等
     """
     try:
-        from database import SessionLocal
-        from models import RoadNetwork
-
-        db = SessionLocal()
+        # 获取图的节点和道路信息
         try:
-            # 获取道路统计
-            roads = db.query(RoadNetwork).all()
+            from core.graph import Graph
+            graph = Graph.from_database()
+            total_nodes = len(graph.nodes)
+            total_roads = len(graph.edges)
+            
+            # 计算道路统计
+            total_flow = 0
+            congested_roads = 0
+            total_congestion = 0
+            
+            for (from_node, to_node), edge_data in graph.edges.items():
+                current_congestion = edge_data.get('current_congestion', 0)
+                total_flow += int(current_congestion * 10)
+                if current_congestion > 50:
+                    congested_roads += 1
+                total_congestion += current_congestion
+            
+            average_load_factor = total_congestion / total_roads / 100.0 if total_roads > 0 else 0
+        except Exception as e:
+            print(f"获取路网信息失败: {e}")
+            total_nodes = 0
+            total_roads = 0
+            total_flow = 0
+            congested_roads = 0
+            average_load_factor = 0
+        
+        total_capacity = total_roads * 100  # 简化计算
 
-            total_roads = len(roads)
-            total_capacity = total_roads * 100  # 简化计算
-            total_flow = sum(int(road.current_congestion * 10) for road in roads)
-            congested_roads = sum(1 for road in roads if road.current_congestion > 50)
-            average_load_factor = sum(road.current_congestion / 100.0 for road in roads) / total_roads if total_roads > 0 else 0
+        # 系统资源信息
+        try:
+            process = psutil.Process(os.getpid())
+            memory_info = process.memory_info()
+            cpu_percent = process.cpu_percent(interval=0.1)
 
-            # 获取图的节点数量
-            try:
-                from core.graph import Graph
-                graph = Graph.from_database()
-                total_nodes = len(graph.nodes)
-            except Exception as e:
-                print(f"获取节点数量失败: {e}")
-                total_nodes = 0
+            system_stats = SystemStats(
+                total_nodes=total_nodes,
+                total_roads=total_roads,
+                total_capacity=total_capacity,
+                total_flow=total_flow,
+                average_load_factor=round(average_load_factor, 3),
+                congested_roads=congested_roads,
+                thread_pool_stats={
+                    "max_workers": 10,
+                    "running_tasks": 0,
+                    "pending_tasks": 0,
+                    "total_submitted": 0,
+                    "total_completed": 0,
+                    "total_failed": 0,
+                    "total_tasks": 0,
+                    "queue_size": 0
+                },
+                log_stats={
+                    "log_dir": "./logs",
+                    "total_files": 0,
+                    "total_size": 0,
+                    "files": []
+                }
+            )
+        except ImportError:
+            # 如果没有psutil，使用简化版本
+            system_stats = SystemStats(
+                total_nodes=total_nodes,
+                total_roads=total_roads,
+                total_capacity=total_capacity,
+                total_flow=total_flow,
+                average_load_factor=round(average_load_factor, 3),
+                congested_roads=congested_roads
+            )
 
-            # 系统资源信息
-            try:
-                process = psutil.Process(os.getpid())
-                memory_info = process.memory_info()
-                cpu_percent = process.cpu_percent(interval=0.1)
+        logger.info(f"获取系统统计: {total_nodes}节点, {total_roads}道路")
 
-                system_stats = SystemStats(
-                    total_nodes=total_nodes,
-                    total_roads=total_roads,
-                    total_capacity=total_capacity,
-                    total_flow=total_flow,
-                    average_load_factor=round(average_load_factor, 3),
-                    congested_roads=congested_roads,
-                    thread_pool_stats={
-                        "max_workers": 10,
-                        "running_tasks": 0,
-                        "pending_tasks": 0,
-                        "total_submitted": 0,
-                        "total_completed": 0,
-                        "total_failed": 0,
-                        "total_tasks": 0,
-                        "queue_size": 0
-                    },
-                    log_stats={
-                        "log_dir": "./logs",
-                        "total_files": 0,
-                        "total_size": 0,
-                        "files": []
-                    }
-                )
-
-            except ImportError:
-                # 如果没有psutil，使用简化版本
-                system_stats = SystemStats(
-                    total_nodes=total_nodes,
-                    total_roads=total_roads,
-                    total_capacity=total_capacity,
-                    total_flow=total_flow,
-                    average_load_factor=round(average_load_factor, 3),
-                    congested_roads=congested_roads
-                )
-
-            logger.info(f"获取系统统计: {total_nodes}节点, {total_roads}道路")
-
-            return system_stats
-
-        finally:
-            db.close()
+        return system_stats
 
     except Exception as e:
         logger.error(f"获取系统统计失败: {e}")

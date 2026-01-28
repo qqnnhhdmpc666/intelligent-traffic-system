@@ -49,9 +49,9 @@ class FastAPIServer:
 
         # 检查算法文件是否存在
         algo_files = [
-            "../../Server/core/graph.py",
-            "../../Server/core/pathfinding.py",
-            "../../Server/core/route_planner.py"
+            "./core/graph.py",
+            "./core/pathfinding.py",
+            "./core/route_planner.py"
         ]
 
         for algo_file in algo_files:
@@ -100,7 +100,8 @@ class FastAPIServer:
             for i in range(10):
                 time.sleep(1)
                 if self.check_server_health(host, port):
-                    print("✅ 服务器启动成功！"                    print(f"   📖 API文档: http://{host}:{port}/docs")
+                    print("✅ 服务器启动成功！")
+                    print(f"   📖 API文档: http://{host}:{port}/docs")
                     print(f"   🌐 Web界面: http://{host}:{port}")
                     print(f"   💚 健康检查: http://{host}:{port}/health")
                     return True
@@ -171,8 +172,8 @@ def main():
         # 交互模式
         if server.start_server(args.host, args.port, args.reload):
             try:
-                print("
-📋 服务器运行中..."                print("可用命令:")
+                print("\n📋 服务器运行中...")
+                print("可用命令:")
                 print("  - 按 Ctrl+C 停止服务器")
                 print(f"  - 访问 http://{args.host}:{args.port}/docs 查看API文档")
                 print()

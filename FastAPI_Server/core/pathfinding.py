@@ -8,9 +8,8 @@
 import heapq
 import math
 from typing import List, Tuple, Dict, Optional, Set
-# 由于可能存在循环导入，先注释掉Graph导入
-# from graph import Graph
-# 实际使用时再处理
+# 导入Graph类
+from .graph import Graph
 
 
 class Dijkstra:
@@ -311,6 +310,12 @@ class SoftmaxSelector:
         # Prob(P_i) = exp(U(P_i) / τ) / Σ exp(U(P_j) / τ)
         exp_utilities = [math.exp(u / temperature) for u in utilities]
         sum_exp = sum(exp_utilities)
+        
+        # 处理sum_exp为0的情况
+        if sum_exp == 0:
+            # 返回均匀分布的概率
+            n = len(paths)
+            return [1.0 / n for _ in range(n)]
         
         probabilities = [exp_u / sum_exp for exp_u in exp_utilities]
         

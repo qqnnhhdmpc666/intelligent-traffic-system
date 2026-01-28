@@ -58,7 +58,8 @@ async def request_path(data: PathRequest):
             distance=result.get('distance', 0),
             duration=result.get('duration', 0),
             congestion=result.get('congestion', 0),
-            message=result.get('message', '成功')
+            message=result.get('message', '成功'),
+            all_paths=result.get('all_paths', None)
         )
 
         logger.info(f"路径规划完成: {len(result['path'])}个节点, 耗时: {processing_time:.3f}s")
@@ -80,7 +81,8 @@ async def get_nodes():
         planner = get_route_planner()
 
         # 获取图中的所有节点
-        nodes = list(planner.graph.nodes.keys()) if planner.graph else []
+        graph = planner.graph_cache.get_graph()
+        nodes = list(graph.nodes) if graph else []
 
         logger.info(f"获取节点列表: {len(nodes)}个节点")
 
@@ -99,44 +101,31 @@ async def get_roads():
     获取路网道路列表及其状态
     """
     try:
-        from database import SessionLocal
-        from models import RoadNetwork
-
-        db = SessionLocal()
-        try:
-            roads = db.query(RoadNetwork).all()
-
-            roads_data = []
-            for road in roads:
-                # 计算动态权重 (基于论文公式)
-                alpha = RoutePlanner.WEIGHT_ALPHA
-                beta = RoutePlanner.WEIGHT_BETA
-
-                if road.max_speed and road.max_speed > 0:
-                    base_weight = road.length / road.max_speed * 3600  # 基础通行时间(秒)
-                    dynamic_weight = alpha * base_weight + beta * road.current_congestion
-                else:
-                    dynamic_weight = road.length
-
+        planner = get_route_planner()
+        
+        # 获取图中的所有边
+        graph = planner.graph_cache.get_graph()
+        
+        roads_data = []
+        
+        if graph:
+            for (from_node, to_node), edge_data in graph.edges.items():
                 road_data = {
-                    'from': road.start_point.get('node_id', str(road.road_id) + '_start') if isinstance(road.start_point, dict) else str(road.start_point),
-                    'to': road.end_point.get('node_id', str(road.road_id) + '_end') if isinstance(road.end_point, dict) else str(road.end_point),
-                    'weight': dynamic_weight,
+                    'from': from_node,
+                    'to': to_node,
+                    'weight': edge_data.get('weight', 0),
                     'capacity': 100,  # 默认容量
-                    'flow': int(road.current_congestion * 10),  # 简化为拥堵度*10
-                    'load_factor': road.current_congestion / 100.0 if road.current_congestion > 0 else 0,
-                    'length': road.length,
-                    'max_speed': road.max_speed,
-                    'current_congestion': road.current_congestion
+                    'flow': int(edge_data.get('current_congestion', 0) * 10),  # 简化为拥堵度*10
+                    'load_factor': edge_data.get('current_congestion', 0) / 100.0 if edge_data.get('current_congestion', 0) > 0 else 0,
+                    'length': edge_data.get('length', 0),
+                    'max_speed': edge_data.get('max_speed', 60),
+                    'current_congestion': edge_data.get('current_congestion', 0)
                 }
                 roads_data.append(road_data)
 
-            logger.info(f"获取道路列表: {len(roads_data)}条道路")
+        logger.info(f"获取道路列表: {len(roads_data)}条道路")
 
-            return {"roads": roads_data}
-
-        finally:
-            db.close()
+        return {"roads": roads_data}
 
     except Exception as e:
         logger.error(f"获取道路列表失败: {e}")

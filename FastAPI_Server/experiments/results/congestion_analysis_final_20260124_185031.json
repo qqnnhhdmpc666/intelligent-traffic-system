@@ -1,0 +1,301 @@
+{
+  "by_congestion_algorithm": {
+    "light": {
+      "SP": {
+        "average_processing_time": 5.369186401367187e-05,
+        "average_path_length": 2.4,
+        "average_path_weight": 67.47999999999999,
+        "average_path_duration": 78.18768022733234,
+        "average_path_congestion": 3.25,
+        "traffic_efficiency": 0.012789738704262345,
+        "test_cases": 10,
+        "successful_cases": 10,
+        "success_rate": 100.0
+      },
+      "D-KSPP": {
+        "average_processing_time": 0.004295897483825683,
+        "average_path_length": 2.4,
+        "average_path_weight": 67.47999999999999,
+        "average_path_duration": 78.18768022733234,
+        "average_path_congestion": 3.25,
+        "traffic_efficiency": 0.012789738704262345,
+        "test_cases": 10,
+        "successful_cases": 10,
+        "success_rate": 100.0
+      }
+    },
+    "moderate": {
+      "SP": {
+        "average_processing_time": 5.643367767333984e-05,
+        "average_path_length": 2.5,
+        "average_path_weight": 131.42158149393885,
+        "average_path_duration": 149.90886418006426,
+        "average_path_congestion": 3.834012234983929,
+        "traffic_efficiency": 0.00667071961000813,
+        "test_cases": 10,
+        "successful_cases": 10,
+        "success_rate": 100.0
+      },
+      "D-KSPP": {
+        "average_processing_time": 0.003821563720703125,
+        "average_path_length": 2.7,
+        "average_path_weight": 131.67203791370085,
+        "average_path_duration": 150.75932059982625,
+        "average_path_congestion": 3.437465981050692,
+        "traffic_efficiency": 0.006633089058913897,
+        "test_cases": 10,
+        "successful_cases": 10,
+        "success_rate": 100.0
+      }
+    },
+    "heavy": {
+      "SP": {
+        "average_processing_time": 6.127357482910156e-05,
+        "average_path_length": 2.7,
+        "average_path_weight": 257.3838851949137,
+        "average_path_duration": 312.21710915958977,
+        "average_path_congestion": 5.867267073154992,
+        "traffic_efficiency": 0.003202899426914013,
+        "test_cases": 10,
+        "successful_cases": 10,
+        "success_rate": 100.0
+      },
+      "D-KSPP": {
+        "average_processing_time": 0.003572893142700195,
+        "average_path_length": 2.5,
+        "average_path_weight": 266.5336707144335,
+        "average_path_duration": 299.16572293470216,
+        "average_path_congestion": 6.013982207141405,
+        "traffic_efficiency": 0.0033426289288437847,
+        "test_cases": 10,
+        "successful_cases": 10,
+        "success_rate": 100.0
+      }
+    },
+    "extreme": {
+      "SP": {
+        "average_processing_time": 7.803440093994141e-05,
+        "average_path_length": 2.7,
+        "average_path_weight": 470.10897353165853,
+        "average_path_duration": 545.0493899511138,
+        "average_path_congestion": 18.8552215225809,
+        "traffic_efficiency": 0.0018346961182539648,
+        "test_cases": 10,
+        "successful_cases": 10,
+        "success_rate": 100.0
+      },
+      "D-KSPP": {
+        "average_processing_time": 0.0038091421127319338,
+        "average_path_length": 2.4,
+        "average_path_weight": 432.10410730159595,
+        "average_path_duration": 530.1173501528783,
+        "average_path_congestion": 17.32415840876936,
+        "traffic_efficiency": 0.0018863747804360943,
+        "test_cases": 10,
+        "successful_cases": 10,
+        "success_rate": 100.0
+      }
+    }
+  },
+  "algorithm_comparison": {
+    "light": {
+      "time_improvement": 0.0,
+      "efficiency_improvement": 0.0,
+      "weight_reduction": 0.0,
+      "sp_stats": {
+        "average_processing_time": 5.369186401367187e-05,
+        "average_path_length": 2.4,
+        "average_path_weight": 67.47999999999999,
+        "average_path_duration": 78.18768022733234,
+        "average_path_congestion": 3.25,
+        "traffic_efficiency": 0.012789738704262345,
+        "test_cases": 10,
+        "successful_cases": 10,
+        "success_rate": 100.0
+      },
+      "dkspp_stats": {
+        "average_processing_time": 0.004295897483825683,
+        "average_path_length": 2.4,
+        "average_path_weight": 67.47999999999999,
+        "average_path_duration": 78.18768022733234,
+        "average_path_congestion": 3.25,
+        "traffic_efficiency": 0.012789738704262345,
+        "test_cases": 10,
+        "successful_cases": 10,
+        "success_rate": 100.0
+      }
+    },
+    "moderate": {
+      "time_improvement": -0.567315631676366,
+      "efficiency_improvement": -0.5641153173006351,
+      "weight_reduction": -0.19057480279489236,
+      "sp_stats": {
+        "average_processing_time": 5.643367767333984e-05,
+        "average_path_length": 2.5,
+        "average_path_weight": 131.42158149393885,
+        "average_path_duration": 149.90886418006426,
+        "average_path_congestion": 3.834012234983929,
+        "traffic_efficiency": 0.00667071961000813,
+        "test_cases": 10,
+        "successful_cases": 10,
+        "success_rate": 100.0
+      },
+      "dkspp_stats": {
+        "average_processing_time": 0.003821563720703125,
+        "average_path_length": 2.7,
+        "average_path_weight": 131.67203791370085,
+        "average_path_duration": 150.75932059982625,
+        "average_path_congestion": 3.437465981050692,
+        "traffic_efficiency": 0.006633089058913897,
+        "test_cases": 10,
+        "successful_cases": 10,
+        "success_rate": 100.0
+      }
+    },
+    "heavy": {
+      "time_improvement": 4.180227746012596,
+      "efficiency_improvement": 4.362594115682258,
+      "weight_reduction": -3.5549177884974372,
+      "sp_stats": {
+        "average_processing_time": 6.127357482910156e-05,
+        "average_path_length": 2.7,
+        "average_path_weight": 257.3838851949137,
+        "average_path_duration": 312.21710915958977,
+        "average_path_congestion": 5.867267073154992,
+        "traffic_efficiency": 0.003202899426914013,
+        "test_cases": 10,
+        "successful_cases": 10,
+        "success_rate": 100.0
+      },
+      "dkspp_stats": {
+        "average_processing_time": 0.003572893142700195,
+        "average_path_length": 2.5,
+        "average_path_weight": 266.5336707144335,
+        "average_path_duration": 299.16572293470216,
+        "average_path_congestion": 6.013982207141405,
+        "traffic_efficiency": 0.0033426289288437847,
+        "test_cases": 10,
+        "successful_cases": 10,
+        "success_rate": 100.0
+      }
+    },
+    "extreme": {
+      "time_improvement": 2.7395755455436297,
+      "efficiency_improvement": 2.81674232958594,
+      "weight_reduction": 8.08426734434654,
+      "sp_stats": {
+        "average_processing_time": 7.803440093994141e-05,
+        "average_path_length": 2.7,
+        "average_path_weight": 470.10897353165853,
+        "average_path_duration": 545.0493899511138,
+        "average_path_congestion": 18.8552215225809,
+        "traffic_efficiency": 0.0018346961182539648,
+        "test_cases": 10,
+        "successful_cases": 10,
+        "success_rate": 100.0
+      },
+      "dkspp_stats": {
+        "average_processing_time": 0.0038091421127319338,
+        "average_path_length": 2.4,
+        "average_path_weight": 432.10410730159595,
+        "average_path_duration": 530.1173501528783,
+        "average_path_congestion": 17.32415840876936,
+        "traffic_efficiency": 0.0018863747804360943,
+        "test_cases": 10,
+        "successful_cases": 10,
+        "success_rate": 100.0
+      }
+    }
+  },
+  "overall_analysis": {
+    "total_test_cases": 10,
+    "congestion_levels": [
+      "light",
+      "moderate",
+      "heavy",
+      "extreme"
+    ],
+    "algorithms": [
+      "SP",
+      "D-KSPP"
+    ],
+    "best_algorithm_by_scenario": {
+      "light": "SP",
+      "moderate": "SP",
+      "heavy": "D-KSPP",
+      "extreme": "D-KSPP"
+    }
+  },
+  "paper_data": {
+    "arrival_time_comparison": {
+      "light": {
+        "SP_avg_arrival_time_sec": 78.18768022733234,
+        "D_KSPP_avg_arrival_time_sec": 78.18768022733234,
+        "improvement_percent": 0.0
+      },
+      "moderate": {
+        "SP_avg_arrival_time_sec": 149.90886418006426,
+        "D_KSPP_avg_arrival_time_sec": 150.75932059982625,
+        "improvement_percent": -0.567315631676366
+      },
+      "heavy": {
+        "SP_avg_arrival_time_sec": 312.21710915958977,
+        "D_KSPP_avg_arrival_time_sec": 299.16572293470216,
+        "improvement_percent": 4.180227746012596
+      },
+      "extreme": {
+        "SP_avg_arrival_time_sec": 545.0493899511138,
+        "D_KSPP_avg_arrival_time_sec": 530.1173501528783,
+        "improvement_percent": 2.7395755455436297
+      }
+    },
+    "efficiency_comparison": {
+      "light": {
+        "SP_efficiency": 0.012789738704262345,
+        "D_KSPP_efficiency": 0.012789738704262345,
+        "improvement_percent": 0.0
+      },
+      "moderate": {
+        "SP_efficiency": 0.00667071961000813,
+        "D_KSPP_efficiency": 0.006633089058913897,
+        "improvement_percent": -0.5641153173006351
+      },
+      "heavy": {
+        "SP_efficiency": 0.003202899426914013,
+        "D_KSPP_efficiency": 0.0033426289288437847,
+        "improvement_percent": 4.362594115682258
+      },
+      "extreme": {
+        "SP_efficiency": 0.0018346961182539648,
+        "D_KSPP_efficiency": 0.0018863747804360943,
+        "improvement_percent": 2.81674232958594
+      }
+    },
+    "congestion_impact": [
+      {
+        "scenario": "light",
+        "sp_efficiency": 0.012789738704262345,
+        "dkspp_efficiency": 0.012789738704262345,
+        "efficiency_improvement": 0.0
+      },
+      {
+        "scenario": "moderate",
+        "sp_efficiency": 0.00667071961000813,
+        "dkspp_efficiency": 0.006633089058913897,
+        "efficiency_improvement": -0.5641153173006351
+      },
+      {
+        "scenario": "heavy",
+        "sp_efficiency": 0.003202899426914013,
+        "dkspp_efficiency": 0.0033426289288437847,
+        "efficiency_improvement": 4.362594115682258
+      },
+      {
+        "scenario": "extreme",
+        "sp_efficiency": 0.0018346961182539648,
+        "dkspp_efficiency": 0.0018863747804360943,
+        "efficiency_improvement": 2.81674232958594
+      }
+    ]
+  }
+}
