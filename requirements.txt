@@ -1,0 +1,43 @@
+# 智慧交通调度系统 - Python依赖包列表
+
+# FastAPI后端服务依赖
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.5.0
+sqlalchemy==2.0.23
+aiosqlite==0.19.0
+httpx==0.25.2
+python-multipart==0.0.6
+python-jose[cryptography]==3.3.0
+loguru==0.7.2
+python-dotenv==1.0.0
+
+# 树莓派边缘节点依赖
+ultralytics==8.0.196
+opencv-python==4.8.1.78
+numpy==1.24.3
+Pillow==10.0.0
+requests==2.31.0
+urllib3==2.0.4
+pandas==2.0.3
+json5==0.9.14
+psutil==5.9.5
+GPUtil==1.4.0
+pyyaml==6.0.1
+threading-timer==0.1.0
+asyncio-mqtt==0.13.0
+RPi.GPIO==0.7.1
+picamera2==0.3.12
+
+# 开发和测试依赖
+pytest==7.4.3
+pytest-asyncio==0.21.1
+black==23.7.0
+flake8==6.0.0
+
+# 性能测试依赖
+locust==2.17.0
+aiohttp==3.9.1
+
+# 数据分析和可视化
+matplotlib>=3.7.0
